@@ -1,16 +1,31 @@
-# This is a sample Python script.
+import os
+import re
+from dotenv import load_dotenv
+from googleapiclient.discovery import build
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+load_dotenv()
+API_KEY = os.getenv('YOUTUBE_API_KEY')
+CHANNEL_ID = os.getenv('TARGET_CHANNEL_ID')
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def iniciar_youtube():
+    api_key = os.getenv('YOUTUBE_API_KEY')
+    if not api_key:
+        raise ValueError("A chave da API não foi encontrada. Defina YOUTUBE_API_KEY como variável de ambiente.")
 
+    youtube = build(serviceName='youtube', version='v3', developerKey=api_key)
+    return youtube
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+def buscar_live(youtube, channel_id=None):
+    request = youtube.search().list(
+        part="snippet",
+        eventType="live",
+        type="video",
+        channelId=channel_id
+    )
+    response = request.execute()
+    if response.get("items"):
+        return response
+    else:
+        print("Nenhuma live encontrada!!")
+        return None
