@@ -1,12 +1,18 @@
-from app.services.youtube_services import YoutubeServices
+from app.services.description_extractor import DescriptionExtractor
 from app.config.settings import Settings
 
-def main():
-    youtube = YoutubeServices()
-    response = youtube.buscarLive(Settings.channelId, "news")
-    if response==True:
-        print("Deu certo")
-    else: 
-        print("Deu errado") 
 
-main()
+def main():
+    print(f"Iniciando monitoramento no canal")
+
+    extrator = DescriptionExtractor()
+
+    lista_de_lives = extrator.extrair_descricoes(channelId=Settings.channelId, query="news")
+
+    if len(lista_de_lives) > 0:
+        print(f"\nDeu certo! live processada com sucesso.\n")
+    else:
+        print("\nNenhuma live encontrada ou não foi possível extrair os dados.")
+
+if __name__ == "__main__":
+    main()

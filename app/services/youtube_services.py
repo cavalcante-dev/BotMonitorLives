@@ -21,8 +21,18 @@ class YoutubeServices:
             q=query,
             type="video"
         )
-        request.execute()
-        if request!=None:
-            return True
-        else: 
-            return False
+        response = request.execute()
+
+        lives_encontradas = []
+
+        items = response.get("items", [])
+
+        if not items:
+            print("Nenhuma live encontrada!")
+            return []
+
+        for item in items:
+            video_id = item["id"]["videoId"]
+            lives_encontradas.append(video_id)
+
+        return lives_encontradas
