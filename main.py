@@ -17,8 +17,9 @@ def extrair_link_presenca(descricao):
     return None
 
 def enviar_mensagem(link):
-    kit.sendwhatmsg_instantly("+55319879-3748",
-                                f"Tome linkzada (mensagem automatica btw): {link}" )
+    zapNumber = Settings.whatsappNumber;
+    kit.sendwhatmsg_instantly(zapNumber,
+                                f"Tome o link de presença: {link}" )
 
 def main():
     print("Iniciando o Bot de Monitorização\n")
